@@ -1,6 +1,6 @@
 <?php
 //Default Configuration
-$CONFIG = '{"lang":"en","error_reporting":false,"show_hidden":false,"hide_Cols":false,"theme":"light"}';
+$CONFIG = '{"lang":"en","error_reporting":false,"show_hidden":false,"hide_Cols":true,"theme":"light"}';
 
 /**
  * H3K ~ Tiny File Manager V2.6
@@ -13,31 +13,36 @@ $CONFIG = '{"lang":"en","error_reporting":false,"show_hidden":false,"hide_Cols":
 define('VERSION', '2.6');
 
 //Application Title
-define('APP_TITLE', 'Tiny File Manager');
+define('APP_TITLE', 'Private File Transfer / Gallery');
 
 // --- EDIT BELOW CONFIGURATION CAREFULLY ---
 
 // Auth with login/password
 // set true/false to enable/disable it
 // Is independent from IP white- and blacklisting
-$use_auth = true;
+$use_auth = false;
+
+// Root url for links in file manager.Relative to $http_host. Variants: '', 'path/to/subfolder'
+// Will not working if $root_path will be outside of server document root
+$root_url = 'transfer/files-private';
 
 // Login user name and password
 // Users: array('Username' => 'Password', 'Username2' => 'Password2', ...)
 // Generate secure password hash - https://tinyfilemanager.github.io/docs/pwd.html
 $auth_users = array(
-    'admin' => '$2y$10$/K.hjNr84lLNDt8fTXjoI.DBp6PpeyoJ.mGwrrLuCZfAwfSAGqhOW', //admin@123
-    'user' => '$2y$10$Fg6Dz8oH9fPoZ2jJan5tZuv6Z4Kp7avtQ9bDfrdRntXtPeiMAZyGO' //12345
+    'admin' => '$2y$10$poVnB5ZTRECtZ1mmmBa9XuXbw8h6wXBMo9GwCFHW7QBQliW8Sb2Kd', //admin pass (RANDOMIZED / [DISABLED])
+    'user' => '$2y$10$2eQwtqSm5wgeqwvlwQACDuUOBJz1Cove/VP3fAqDI.xA/VWSMQRdX' //user pass (RANDOMIZED / [DISABLED])
 );
 
 // Readonly users
 // e.g. array('users', 'guest', ...)
 $readonly_users = array(
-    'user'
+    'admin',
+    'user',
 );
 
 // Global readonly, including when auth is not being used
-$global_readonly = false;
+$global_readonly = true;
 
 // user specific directories
 // array('Username' => 'Directory path', 'Username2' => 'Directory path', ...)
@@ -51,20 +56,16 @@ $use_highlightjs = true;
 $highlightjs_style = 'vs';
 
 // Enable ace.js (https://ace.c9.io/) on view's page
-$edit_files = true;
+$edit_files = false;
 
 // Default timezone for date() and time()
 // Doc - http://php.net/manual/en/timezones.php
-$default_timezone = 'Etc/UTC'; // UTC
+$default_timezone = 'America/New_York'; 
 
 // Root path for file manager
 // use absolute path of directory i.e: '/var/www/folder' or $_SERVER['DOCUMENT_ROOT'].'/folder'
 //make sure update $root_url in next section
-$root_path = $_SERVER['DOCUMENT_ROOT'];
-
-// Root url for links in file manager.Relative to $http_host. Variants: '', 'path/to/subfolder'
-// Will not working if $root_path will be outside of server document root
-$root_url = '';
+$root_path = $_SERVER['DOCUMENT_ROOT'] . ( $root_url != '' ? '/' . $root_url : '' );
 
 // Server hostname. Can set manually if wrong
 // $_SERVER['HTTP_HOST'].'/folder'
@@ -81,7 +82,7 @@ $datetime_format = 'm/d/Y g:i A';
 // 'full' => show full path
 // 'relative' => show path relative to root_path
 // 'host' => show path on the host
-$path_display_mode = 'full';
+$path_display_mode = 'relative';
 
 // Allowed file extensions for create and rename files
 // e.g. 'txt,html,css,js'
@@ -98,7 +99,11 @@ $favicon_path = '';
 
 // Files and folders to excluded from listing
 // e.g. array('myfile.html', 'personal-folder', '*.php', '/path/to/folder', ...)
-$exclude_items = array();
+$exclude_items = array(
+                 '.htaccess',
+                 'index.html',
+                 'index.php',
+                 );
 
 // Online office Docs Viewer
 // Available rules are 'google', 'microsoft' or false
@@ -3828,7 +3833,7 @@ function fm_show_header_login()
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="Web based File Manager in PHP, Manage your files efficiently and easily with Tiny File Manager">
-        <meta name="author" content="CCP Programmers">
+        <meta name="author" content="CCP Programmers" >
         <meta name="robots" content="noindex, nofollow">
         <meta name="googlebot" content="noindex">
         <?php if ($favicon_path) {
@@ -3991,7 +3996,7 @@ function fm_show_header_login()
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="Web based File Manager in PHP, Manage your files efficiently and easily with Tiny File Manager">
-        <meta name="author" content="CCP Programmers">
+        <meta name="author" content="CCP Programmers" >
         <meta name="robots" content="noindex, nofollow">
         <meta name="googlebot" content="noindex">
         <?php if ($favicon_path) {
@@ -5492,7 +5497,7 @@ function fm_show_header_login()
 
         // English Language
         $tr['en']['AppName']        = 'Tiny File Manager';
-        $tr['en']['AppTitle']       = 'File Manager';
+        $tr['en']['AppTitle']       = APP_TITLE;
         $tr['en']['Login']          = 'Sign in';
         $tr['en']['Username']       = 'Username';
         $tr['en']['Password']       = 'Password';
